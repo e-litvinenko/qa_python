@@ -10,6 +10,12 @@ class TestBooksCollector:
         collector.add_new_book('Что делать, если ваш кот хочет вас убить')
         assert len(collector.get_books_genre()) == 2
 
+    def test_add_new_book_duplicate_not_added(self): #Добавила: Тест с проверкой добавления двух одинаковых книг
+        collector = BooksCollector()
+        collector.add_new_book('Мастер и Маргарита')
+        collector.add_new_book('Мастер и Маргарита')
+        assert len(collector.get_books_genre()) == 1
+
     @pytest.mark.parametrize('book_name', [
         'Мастер и Маргарита',
         'Незнайка на Луне', 
@@ -29,6 +35,13 @@ class TestBooksCollector:
         collector = BooksCollector()
         collector.add_new_book(book_name)
         assert len(collector.get_books_genre()) == 0
+
+    def test_add_new_book_exactly_40_characters_added(self): #Добавила: Тест с проверкой границы 40 символов
+        collector = BooksCollector()
+        book_name = 'Ровно 40 символов 40 символов 40 символо'
+        collector.add_new_book(book_name)
+        assert book_name in collector.get_books_genre()
+
 
     @pytest.mark.parametrize('book_name, genre', [
         ('Незнайка на Луне', 'Фантастика'),
@@ -83,6 +96,12 @@ class TestBooksCollector:
         collector.add_book_in_favorites('Мастер и Маргарита')
         assert 'Мастер и Маргарита' in collector.get_list_of_favorites_books()
 
+
+    def test_add_book_to_favorites_not_in_collection_not_added(self): #Добавила: Тест проверки добавления книги в избранное, которая не была добавлена в коллекцию книг
+        collector = BooksCollector() 
+        collector.add_book_in_favorites('Алиса в Зазеркалье')
+        assert 'Алиса в Зазеркалье' not in collector.get_list_of_favorites_books()
+
     def test_delete_book_from_favorites_removed(self):
         collector = BooksCollector()
         collector.add_new_book('Тайна третьей планеты')
@@ -94,4 +113,3 @@ class TestBooksCollector:
         collector = BooksCollector()
         collector.add_new_book('Мастер и Маргарита')
         assert isinstance(collector.get_books_genre(), dict)
-        
